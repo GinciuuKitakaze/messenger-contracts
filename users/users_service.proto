@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package users;
+option go_package="github.com/GinciuuKitakaze/messenger-contracts/users/go;users";
+
+import "google/api/annotations.proto";
+import "users/users_model.proto";
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/users"
+      body: "user"
+    };
+  }
+
+  rpc GetUser(GetUserRequest) returns (GetUserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/users/{user_id}"
+    };
+  }
+
+  rpc GetUsers(GetUsersRequest) returns (GetUsersResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/users"
+    };
+  }
+
+  rpc GetUserByEmailOrPhone(GetUserByEmailOrPhoneRequest) returns (GetUserByEmailOrPhoneResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/users/by-contact"
+      // email_or_phone передаётся как query-параметр:
+      // /api/v1/users/by-contact?email_or_phone=...
+    };
+  }
+
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {
+    option (google.api.http) = {
+      patch: "/api/v1/users/{user_id}"
+      body: "user"
+    };
+  }
+
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/users/{user_id}"
+    };
+  }
+}
+
+message CreateUserRequest{
+  CreateUser user = 1;
+}
+
+message CreateUserResponse {
+  User user = 1;
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message GetUsersRequest{
+  uint32 offset = 1;
+  uint32 limit  = 2;
+}
+
+message GetUsersResponse {
+  repeated User users = 1;
+}
+
+message GetUserByEmailOrPhoneRequest {
+  string email_or_phone = 1;
+}
+
+message GetUserByEmailOrPhoneResponse{
+  User user = 1;
+}
+
+message DeleteUserRequest {
+  string user_id = 1;
+}
+
+message DeleteUserResponse {
+  User user = 1;
+}
+
+message UpdateUserRequest {
+  string user_id = 1;
+  UpdateUser user = 2;
+}
+
+message UpdateUserResponse{
+  User user = 1;
+}

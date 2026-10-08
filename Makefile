@@ -25,6 +25,15 @@ gen: docker-build
 			--grpc-gateway_opt=module=$(GO_MODULE) \
 			--openapiv2_out=/app \
 			/app/users/*.proto; \
+		echo ">> Processing auth"; \
+        protoc \
+        	-I /app \
+        	-I /usr/local/include/googleapis \
+        	--go_out=/app \
+        	--go_opt=module=$(GO_MODULE) \
+        	--go-grpc_out=/app \
+        	--go-grpc_opt=module=$(GO_MODULE) \
+        	/app/auth/*.proto; \
 		echo ">> Processing pagination"; \
 		protoc \
 			-I /app \
